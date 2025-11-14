@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <!-- Nội dung chính scroll được -->
+    <ScrollView
+        android:id="@+id/scrollContent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/layoutMiniPlayer"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- Header -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:id="@+id/txtGreeting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="MuseFlow"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary"/>
+
+                <ImageView
+                    android:id="@+id/btnSettings"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@drawable/ic_settings"/>
+
+                <ImageView
+                    android:id="@+id/btnLogout"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_logout"
+                    android:layout_toLeftOf="@id/btnSettings"
+                    android:layout_marginRight="12dp"/>
+
+                <ImageView
+                    android:id="@+id/btnPlaylists"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_playlist"
+                    android:layout_toLeftOf="@id/btnLogout"
+                    android:layout_marginRight="12dp"/>
+
+                <ImageView
+                    android:id="@+id/btnProfile"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_user"
+                    android:layout_toLeftOf="@id/btnPlaylists"
+                    android:layout_marginRight="12dp"
+                    android:contentDescription="Profile" />
+
+            </RelativeLayout>
+
+            <!-- Thanh tìm kiếm -->
+            <EditText
+                android:id="@+id/edtSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Search songs, artists, playlists..."
+                android:padding="12dp"
+                android:background="@drawable/bg_input"
+                android:drawableLeft="@drawable/ic_search"
+                android:drawablePadding="8dp"
+                android:layout_marginBottom="16dp"/>
+
+            <!-- Categories Filter -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                    android:id="@+id/layoutCategories"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCatPop"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pop"
+                        android:textColorLink="#A6020202"
+                        app:rippleColor="#E91E63" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCatIndie"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Indie"
+                        app:rippleColor="#E91E63" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCatHipHop"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Hip-Hop"
+                        app:rippleColor="#E91E63" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnCatBallad"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:text="Ballad"
+                        app:rippleColor="#E91E63" />
+                </LinearLayout>
+            </HorizontalScrollView>
+
+            <!-- Recommended for you (Grid) -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Recommended for you"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvGridSongs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <!-- Top Hits (List) -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Top Hits"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvListSongs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/txtEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Chưa có bài hát nào được admin kích hoạt"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <!-- Mini Player -->
+    <LinearLayout
+        android:id="@+id/layoutMiniPlayer"
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@color/colorSurface"
+        android:elevation="8dp"
+        android:layout_alignParentBottom="true">
+        <!-- Mini Player content from previous steps -->
+    </LinearLayout>
+
+</RelativeLayout>

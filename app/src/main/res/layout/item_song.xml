@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    card_view:cardCornerRadius="16dp"
+    card_view:cardElevation="4dp"
+    android:layout_marginBottom="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="72dp"
+        android:padding="8dp">
+
+        <ImageView
+            android:id="@+id/imgThumb"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/ic_music_note"
+            android:scaleType="centerCrop"
+            android:layout_alignParentStart="true"/>
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/imgThumb"
+            android:layout_toLeftOf="@+id/imgFavorite"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/txtTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Song title"
+                android:textStyle="bold"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:id="@+id/txtArtist"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Artist"
+                android:textSize="12sp"
+                android:textColor="@android:color/darker_gray"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/imgAddToPlaylist"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_playlist_add"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"/>
+
+        <ImageView
+            android:id="@+id/imgFavorite"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_favorite_border"
+            android:layout_toLeftOf="@id/imgAddToPlaylist"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

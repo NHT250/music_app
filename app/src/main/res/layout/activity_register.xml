@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create account"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Display name -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Display name"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/edtDisplayName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_input"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:hint="Ví dụ: Minh Lofi"/>
+
+        <!-- Username -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/edtUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_input"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:hint="Tên dùng để đăng nhập"/>
+
+        <!-- Password -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/edtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_input"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textPassword"
+            android:hint="Mật khẩu"/>
+
+        <!-- Confirm password -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Confirm password"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/edtConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_input"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp"
+            android:inputType="textPassword"
+            android:hint="Nhập lại mật khẩu"/>
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sign up"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white"/>
+
+        <TextView
+            android:id="@+id/txtGoLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account? Login"
+            android:textColor="@color/colorSecondary"
+            android:layout_marginTop="16dp"/>
+
+    </LinearLayout>
+</ScrollView>

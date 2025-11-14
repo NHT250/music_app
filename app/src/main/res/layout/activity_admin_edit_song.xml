@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/colorBackground">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txtTitleScreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add song"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimary"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- Cover art -->
+        <ImageView
+            android:id="@+id/imgCover"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/ic_music_note"
+            android:scaleType="centerCrop"
+            android:background="@drawable/bg_avatar_circle"
+            android:padding="4dp"
+            android:contentDescription="Cover art"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap to change cover"
+            android:textSize="12sp"
+            android:textColor="@android:color/darker_gray"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="16dp"/>
+
+        <EditText
+            android:id="@+id/edtTitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Title"
+            android:background="@drawable/bg_input"
+            android:padding="10dp"/>
+
+        <EditText
+            android:id="@+id/edtArtist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Artist"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input"
+            android:padding="10dp"/>
+
+        <EditText
+            android:id="@+id/edtCategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Category"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input"
+            android:padding="10dp"/>
+
+        <EditText
+            android:id="@+id/edtFilePath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Resource Name (e.g. kho_ve_nu_cuoi)"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_input"
+            android:padding="10dp"/>
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@android:color/white"/>
+
+    </LinearLayout>
+</ScrollView>

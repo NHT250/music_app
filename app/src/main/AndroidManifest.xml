@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:name=".MuseFlowApp"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="MuseFlow"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Music_Application">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".ui.IntroActivity" />
+        <activity android:name=".ui.RegisterActivity" />
+        <activity android:name=".ui.SettingsActivity" />
+        <activity android:name=".ui.AdminEditSongActivity" />
+        <activity android:name=".ui.AdminDashboardActivity" />
+        <activity android:name=".ui.admin.AdminActivity" />
+        <activity android:name=".ui.PlayerActivity" />
+        <activity android:name=".ui.UserHomeActivity" />
+        <activity android:name=".ui.UserProfileActivity" />
+        <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.AdminProfileActivity" />
+        <activity android:name=".ui.PlaylistListActivity" />
+        <activity android:name=".ui.PlaylistDetailActivity" />
+
+        <service
+            android:name=".player.MusicService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback" />
+    </application>
+
+</manifest>

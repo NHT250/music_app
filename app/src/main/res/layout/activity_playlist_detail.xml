@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/txtPlaylistTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Playlist Title"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnAddSongsToPlaylist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E91E63"
+        android:text="Add Songs" />
+
+    <Button
+        android:id="@+id/btnShuffle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#E91E63"
+        android:text="Shuffle Play" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPlaylistSongs"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
