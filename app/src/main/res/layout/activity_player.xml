@@ -58,7 +58,7 @@
             android:layout_height="24dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:tint="?attr/colorOnSurface"
-            android:src="@android:drawable/star_off" />
+            android:src="@drawable/ic_favorite_border" />
         
         <TextView
             android:id="@+id/txt_like_count_player"
@@ -75,7 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Artist"
-        android:textColor="?attr/colorOnSurface"
+        android.textColor="?attr/colorOnSurface"
         android:layout_marginTop="4dp"/>
 
     <LinearLayout

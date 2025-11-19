@@ -10,7 +10,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_playing_bar">
+        android:layout_above="@+id/mini_player_container">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -86,45 +86,20 @@
                 android:padding="12dp" />
 
             <!-- Categories -->
-            <LinearLayout
-                android:id="@+id/categories"
+            <HorizontalScrollView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:orientation="horizontal">
+                android:scrollbars="none">
 
-                 <Button
-                    android:id="@+id/btn_pop"
-                    style="?android:attr/borderlessButtonStyle"
+                <com.google.android.material.chip.ChipGroup
+                    android:id="@+id/chip_group_categories"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="POP"
-                    android:textColor="?attr/colorOnSurface" />
+                    app:singleLine="true"
+                    app:singleSelection="true"/>
 
-                <Button
-                    android:id="@+id/btn_indie"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="INDIE"
-                    android:textColor="?attr/colorOnSurface" />
-
-                <Button
-                    android:id="@+id/btn_hiphop"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="HIP-HOP"
-                    android:textColor="?attr/colorOnSurface" />
-
-                <Button
-                    android:id="@+id/btn_ballad"
-                    style="?android:attr/borderlessButtonStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="37dp"
-                    android:text="BALLAD"
-                    android:textColor="?attr/colorOnSurface" />
-            </LinearLayout>
+            </HorizontalScrollView>
 
             <!-- Top Hits -->
             <TextView
@@ -168,37 +143,17 @@
 
     </ScrollView>
 
-    <!-- Bottom Playing Bar -->
-    <RelativeLayout
-        android:id="@+id/bottom_playing_bar"
+    <!-- Mini Player -->
+    <FrameLayout
+        android:id="@+id/mini_player_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/rounded_corner_background"
-        android:backgroundTint="?attr/colorSurfaceVariant"
-        android:padding="12dp"
-        android:layout_margin="16dp"
         android:visibility="gone"
         tools:visibility="visible">
 
-        <ImageView
-            android:id="@+id/playing_icon"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_playing"
-            app:tint="?attr/colorOnSurfaceVariant" />
+        <include layout="@layout/mini_player" />
 
-        <TextView
-            android:id="@+id/playing_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/playing_icon"
-            android:layout_marginStart="8dp"
-            android:textColor="?attr/colorOnSurfaceVariant"
-            android:text="Playing: Son tung" />
-
-    </RelativeLayout>
+    </FrameLayout>
 
 </RelativeLayout>

@@ -4,21 +4,17 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.example.music_application.R;
 import com.example.music_application.model.Song;
 
 import java.util.List;
 
-public class SongHorizontalAdapter extends RecyclerView.Adapter<SongHorizontalAdapter.SongHorizontalViewHolder> {
+public class SongHorizontalAdapter extends BaseSongAdapter {
 
-    private Context context;
     private List<Song> songList;
     private OnSongClickListener listener;
 
@@ -27,24 +23,28 @@ public class SongHorizontalAdapter extends RecyclerView.Adapter<SongHorizontalAd
     }
 
     public SongHorizontalAdapter(Context context, List<Song> songList, OnSongClickListener listener) {
-        this.context = context;
+        super(context);
         this.songList = songList;
         this.listener = listener;
     }
 
     @NonNull
     @Override
-    public SongHorizontalViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public SongViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_song_horizontal, parent, false);
-        return new SongHorizontalViewHolder(view);
+        return new SongViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SongHorizontalViewHolder holder, int position) {
-        Song song = songList.get(position);
-        holder.txtTitle.setText(song.getTitle());
-        holder.txtArtist.setText(song.getArtist());
-        Glide.with(context).load(song.getCover()).into(holder.imgCover);
+    public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
+        super.onBindViewHolder(holder, position);
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                if (position != RecyclerView.NO_POSITION) {
+                    listener.onSongClick(position);
+                }
+            }
+        });
     }
 
     @Override
@@ -52,25 +52,9 @@ public class SongHorizontalAdapter extends RecyclerView.Adapter<SongHorizontalAd
         return songList.size();
     }
 
-    class SongHorizontalViewHolder extends RecyclerView.ViewHolder {
-        ImageView imgCover;
-        TextView txtTitle, txtArtist;
-
-        public SongHorizontalViewHolder(@NonNull View itemView) {
-            super(itemView);
-            imgCover = itemView.findViewById(R.id.img_song_cover_horizontal);
-            txtTitle = itemView.findViewById(R.id.txt_song_title_horizontal);
-            txtArtist = itemView.findViewById(R.id.txt_song_artist_horizontal);
-
-            itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onSongClick(position);
-                    }
-                }
-            });
-        }
+    @Override
+    protected Song getSongAt(int position) {
+        return songList.get(position);
     }
 
     public void setSongs(List<Song> songs) {

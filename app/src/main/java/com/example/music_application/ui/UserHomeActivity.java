@@ -1,235 +1,283 @@
 package com.example.music_application.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
-import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.music_application.R;
-import com.example.music_application.adapter.RecommendedSongAdapter;
+import com.example.music_application.adapter.RecommendedAdapter;
 import com.example.music_application.adapter.TopHitsAdapter;
+import com.example.music_application.firebase.FirebaseAuthManager;
+import com.example.music_application.firebase.SongRepository;
 import com.example.music_application.model.Song;
-import com.example.music_application.player.PlayerManager;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.example.music_application.service.MusicService;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class UserHomeActivity extends AppCompatActivity implements View.OnClickListener, RecommendedSongAdapter.OnSongClickListener {
+import static com.example.music_application.model.MusicConstant.ACTION_PAUSE;
+import static com.example.music_application.model.MusicConstant.ACTION_RESUME;
+import static com.example.music_application.model.MusicConstant.ACTION_STOP;
+import static com.example.music_application.model.MusicConstant.MUSIC_ACTION;
 
-    private RecyclerView topHitsRecyclerView, recommendedRecyclerView;
+public class UserHomeActivity extends AppCompatActivity {
+    private FrameLayout miniPlayerContainer;
+    private ImageView imageSong, btnClose, btnProfile, btnSettings, btnLogout, btnPlaylistList;
+    private TextView textSongName, textArtistName;
+    private ImageButton buttonPlayPause;
+    private RecyclerView rvTopHits, rvRecommended;
+    private ChipGroup chipGroupCategories;
+
+    private MusicService musicService;
+    private boolean isBound = false;
+    private Song mSong;
+    private FirebaseAuthManager authManager;
+    private SongRepository songRepository;
+
     private TopHitsAdapter topHitsAdapter;
-    private RecommendedSongAdapter recommendedAdapter;
+    private RecommendedAdapter recommendedAdapter;
+    private List<Song> allSongs = new ArrayList<>();
+    private List<Song> topHitsSongs = new ArrayList<>();
+    private List<Song> recommendedSongs = new ArrayList<>();
 
-    private List<Song> allSongsList; // Stores all songs
-    private List<Song> topHitsList; // For Top Hits RecyclerView
-    private List<Song> recommendedList; // For Recommended RecyclerView
+    private BroadcastReceiver musicReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int action = intent.getIntExtra(MUSIC_ACTION, 0);
+            handleMusicAction(action);
+        }
+    };
 
-    private DatabaseReference databaseReference;
-    private PlayerManager playerManager;
+    private ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+            musicService = binder.getService();
+            isBound = true;
+            updateMiniPlayerState();
+        }
 
-    private ImageView btnProfile, btnPlaylistList, btnLogout, btnSettings;
-    private Button btnPop, btnIndie, btnHiphop, btnBallad;
-    private TextView recommendedTitle;
-    private RelativeLayout bottomPlayingBar;
-    private TextView playingText;
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            isBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_home);
-
-        playerManager = PlayerManager.getInstance();
+        authManager = new FirebaseAuthManager();
+        songRepository = new SongRepository();
 
         initViews();
-        setupClickListeners();
         setupRecyclerViews();
+        setupClickListeners();
+        setupCategoryChips();
+        loadSongs();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("songs");
-        fetchSongs();
+        LocalBroadcastManager.getInstance(this).registerReceiver(musicReceiver, new IntentFilter(MUSIC_ACTION));
+        bindService(new Intent(this, MusicService.class), connection, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateMiniPlayerState();
     }
 
     private void initViews() {
-        topHitsRecyclerView = findViewById(R.id.rv_top_hits);
-        recommendedRecyclerView = findViewById(R.id.rv_recommended);
+        miniPlayerContainer = findViewById(R.id.mini_player_container);
+        imageSong = findViewById(R.id.image_song);
+        textSongName = findViewById(R.id.text_song_name);
+        textArtistName = findViewById(R.id.text_artist_name);
+        buttonPlayPause = findViewById(R.id.button_play_pause);
+        btnClose = findViewById(R.id.button_close);
+        rvTopHits = findViewById(R.id.rv_top_hits);
+        rvRecommended = findViewById(R.id.rv_recommended);
         btnProfile = findViewById(R.id.btn_profile);
-        btnPlaylistList = findViewById(R.id.btn_playlist_list);
-        btnLogout = findViewById(R.id.btn_logout);
         btnSettings = findViewById(R.id.btn_settings);
-        btnPop = findViewById(R.id.btn_pop);
-        btnIndie = findViewById(R.id.btn_indie);
-        btnHiphop = findViewById(R.id.btn_hiphop);
-        btnBallad = findViewById(R.id.btn_ballad);
-        recommendedTitle = findViewById(R.id.recommended_title);
-        bottomPlayingBar = findViewById(R.id.bottom_playing_bar);
-        playingText = findViewById(R.id.playing_text);
-    }
-
-    private void setupClickListeners() {
-        btnProfile.setOnClickListener(this);
-        btnPlaylistList.setOnClickListener(this);
-        btnLogout.setOnClickListener(this);
-        btnSettings.setOnClickListener(this);
-        btnPop.setOnClickListener(this);
-        btnIndie.setOnClickListener(this);
-        btnHiphop.setOnClickListener(this);
-        btnBallad.setOnClickListener(this);
-        recommendedTitle.setOnClickListener(this);
+        btnLogout = findViewById(R.id.btn_logout);
+        btnPlaylistList = findViewById(R.id.btn_playlist_list);
+        chipGroupCategories = findViewById(R.id.chip_group_categories);
     }
 
     private void setupRecyclerViews() {
-        // Top Hits (Horizontal)
-        topHitsRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        topHitsList = new ArrayList<>();
-        topHitsAdapter = new TopHitsAdapter(this, topHitsList, position -> onSongClick(topHitsList.get(position)));
-        topHitsRecyclerView.setAdapter(topHitsAdapter);
+        topHitsAdapter = new TopHitsAdapter(this, topHitsSongs, this::onSongSelected);
+        rvTopHits.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvTopHits.setAdapter(topHitsAdapter);
 
-        // Recommended (Vertical)
-        recommendedRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recommendedList = new ArrayList<>();
-        recommendedAdapter = new RecommendedSongAdapter(this, recommendedList, this);
-        recommendedRecyclerView.setAdapter(recommendedAdapter);
+        recommendedAdapter = new RecommendedAdapter(this, recommendedSongs, this::onSongSelected);
+        rvRecommended.setLayoutManager(new LinearLayoutManager(this));
+        rvRecommended.setAdapter(recommendedAdapter);
     }
 
-    private void fetchSongs() {
-        databaseReference.addValueEventListener(new ValueEventListener() {
+    private void loadSongs() {
+        songRepository.getAllSongs(new SongRepository.SongListListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                allSongsList = new ArrayList<>();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Song song = dataSnapshot.getValue(Song.class);
-                    if (song != null) {
-                        allSongsList.add(song);
-                    }
-                }
-                // Initially, display all songs in both lists
-                filterSongs(null);
+            public void onSongListLoaded(List<Song> songs) {
+                // Sort songs by likes in descending order
+                Collections.sort(songs, (s1, s2) -> Integer.compare(s2.getLikes(), s1.getLikes()));
+
+                allSongs.clear();
+                allSongs.addAll(songs);
+                
+                topHitsSongs.clear();
+                topHitsSongs.addAll(songs.subList(0, Math.min(5, songs.size())));
+                topHitsAdapter.notifyDataSetChanged();
+
+                filterSongs("All");
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(UserHomeActivity.this, "Failed to load songs.", Toast.LENGTH_SHORT).show();
+            public void onError(Exception e) {
+                Toast.makeText(UserHomeActivity.this, "Failed to load songs: " + e.getMessage(), Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    private void setupCategoryChips() {
+        String[] categories = {"All", "Pop", "Indie", "Hip-Hop", "Ballad"};
+        for (String category : categories) {
+            Chip chip = new Chip(this);
+            chip.setText(category);
+            chip.setCheckable(true);
+            chip.setOnClickListener(v -> {
+                chipGroupCategories.clearCheck();
+                chip.setChecked(true);
+                filterSongs(category);
+            });
+            chipGroupCategories.addView(chip);
+        }
+        ((Chip)chipGroupCategories.getChildAt(0)).setChecked(true);
+    }
+
     private void filterSongs(String category) {
-        List<Song> filteredList = new ArrayList<>();
-        if (category == null) {
-            filteredList.addAll(allSongsList);
+        recommendedSongs.clear();
+        if (category.equals("All")) {
+            recommendedSongs.addAll(allSongs);
         } else {
-            for (Song song : allSongsList) {
-                if (category.equalsIgnoreCase(song.getCategory())) {
-                    filteredList.add(song);
+            for (Song song : allSongs) {
+                if (song.getCategory() != null && song.getCategory().equalsIgnoreCase(category)) {
+                    recommendedSongs.add(song);
                 }
             }
         }
-
-        if (filteredList.isEmpty() && category != null) {
-            Toast.makeText(this, "No songs found in this category", Toast.LENGTH_SHORT).show();
-        }
-
-        // Update Top Hits list
-        topHitsList.clear();
-        if (filteredList.size() > 5) {
-            topHitsList.addAll(filteredList.subList(0, 5));
-        } else {
-            topHitsList.addAll(filteredList);
-        }
-        topHitsAdapter.setSongs(topHitsList);
-
-        // Update Recommended list with shuffled songs
-        recommendedList.clear();
-        List<Song> shuffledList = new ArrayList<>(allSongsList);
-        Collections.shuffle(shuffledList);
-        recommendedList.addAll(shuffledList);
-        recommendedAdapter.setSongs(recommendedList);
+        recommendedAdapter.notifyDataSetChanged();
     }
 
-    public void onSongClick(Song song) {
-        int position = -1;
-        for (int i = 0; i < recommendedList.size(); i++) {
-            if (recommendedList.get(i).getId().equals(song.getId())) {
-                position = i;
-                break;
-            }
-        }
+    private void setupClickListeners() {
+        btnProfile.setOnClickListener(v -> startActivity(new Intent(UserHomeActivity.this, ProfileActivity.class)));
+        btnSettings.setOnClickListener(v -> startActivity(new Intent(UserHomeActivity.this, SettingsActivity.class)));
+        btnPlaylistList.setOnClickListener(v -> startActivity(new Intent(UserHomeActivity.this, PlaylistListActivity.class)));
 
-        if (position != -1) {
-            playerManager.setSongList(recommendedList);
-
-            Intent intent = new Intent(this, PlayerActivity.class);
-            intent.putExtra("song_position", position);
-            startActivity(intent);
-
-            Song clickedSong = recommendedList.get(position);
-            playingText.setText("Playing: " + clickedSong.getTitle());
-            bottomPlayingBar.setVisibility(View.VISIBLE);
-        }
-    }
-
-    @Override
-    public void onSongClick(int position) {
-        onSongClick(recommendedList.get(position));
-    }
-
-    @Override
-    public void onLikeClick(int position) {
-        Song song = recommendedList.get(position);
-        Toast.makeText(this, "Liked " + song.getTitle(), Toast.LENGTH_SHORT).show();
-        // Implement like functionality here
-    }
-
-    @Override
-    public void onAddToPlaylistClick(int position) {
-        Song song = recommendedList.get(position);
-        Toast.makeText(this, "Added " + song.getTitle() + " to playlist", Toast.LENGTH_SHORT).show();
-        // Implement add to playlist functionality here
-    }
-
-    @Override
-    public void onClick(View v) {
-        final int id = v.getId();
-        if (id == R.id.btn_profile) {
-            startActivity(new Intent(this, ProfileActivity.class));
-        } else if (id == R.id.btn_playlist_list) {
-            startActivity(new Intent(this, PlaylistListActivity.class));
-        } else if (id == R.id.btn_logout) {
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, LoginActivity.class));
+        btnLogout.setOnClickListener(v -> {
+            authManager.signOut();
+            startActivity(new Intent(UserHomeActivity.this, LoginActivity.class)
+                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
-        } else if (id == R.id.btn_settings) {
-            startActivity(new Intent(this, SettingsActivity.class));
-        } else if (id == R.id.btn_pop) {
-            filterSongs("POP");
-        } else if (id == R.id.btn_indie) {
-            filterSongs("INDIE");
-        } else if (id == R.id.btn_hiphop) {
-            filterSongs("HIP-HOP");
-        } else if (id == R.id.btn_ballad) {
-            filterSongs("BALLAD");
-        } else if (id == R.id.recommended_title) {
-            filterSongs(null); // Show all songs
+        });
+
+        buttonPlayPause.setOnClickListener(v -> {
+            if (musicService != null && isBound) {
+                if (musicService.isPlaying()) {
+                    musicService.pauseMusic();
+                } else {
+                    musicService.resumeMusic();
+                }
+            }
+        });
+
+        btnClose.setOnClickListener(v -> {
+            if (musicService != null && isBound) {
+                musicService.stopMusic();
+            }
+        });
+
+        miniPlayerContainer.setOnClickListener(v -> {
+            if (mSong != null) {
+                Intent playerIntent = new Intent(this, PlayerActivity.class);
+                playerIntent.putExtra("song", mSong);
+                startActivity(playerIntent);
+            }
+        });
+    }
+
+    private void onSongSelected(Song selectedSong) {
+        if (selectedSong == null) return;
+        mSong = selectedSong;
+
+        Intent serviceIntent = new Intent(this, MusicService.class);
+        serviceIntent.putExtra("song", (Serializable) selectedSong);
+        startService(serviceIntent);
+
+        Intent playerIntent = new Intent(this, PlayerActivity.class);
+        playerIntent.putExtra("song", (Serializable) selectedSong);
+        startActivity(playerIntent);
+    }
+
+    private void handleMusicAction(int action) {
+        switch (action) {
+            case ACTION_PAUSE:
+            case ACTION_RESUME:
+                updateMiniPlayerState();
+                break;
+            case ACTION_STOP:
+                hideMiniPlayer();
+                break;
         }
+    }
+
+    private void updateMiniPlayerState() {
+        if (isBound && musicService != null && musicService.getCurrentSong() != null) {
+            mSong = musicService.getCurrentSong();
+            miniPlayerContainer.setVisibility(View.VISIBLE);
+            textSongName.setText(mSong.getTitle());
+            textArtistName.setText(mSong.getArtist());
+            buttonPlayPause.setImageResource(musicService.isPlaying() ? R.drawable.ic_pause : R.drawable.ic_play);
+
+            if (mSong.getCover() != null && !mSong.getCover().isEmpty()) {
+                Glide.with(this).load(mSong.getCover()).into(imageSong);
+            } else {
+                imageSong.setImageResource(R.drawable.ic_music);
+            }
+        } else {
+            hideMiniPlayer();
+        }
+    }
+
+    private void hideMiniPlayer() {
+        miniPlayerContainer.setVisibility(View.GONE);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(musicReceiver);
+        if (isBound) {
+            unbindService(connection);
+            isBound = false;
+        }
     }
 }

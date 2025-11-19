@@ -110,7 +110,40 @@ public class SongRepository {
                 if (committed) {
                     onSuccess.run();
                 } else {
-                    onFailure.accept(error.toException());
+                    if (error != null) {
+                        onFailure.accept(error.toException());
+                    } else {
+                        onFailure.accept(new Exception("Failed to increment likes."));
+                    }
+                }
+            }
+        });
+    }
+
+    public void decrementLikes(String songId, Runnable onSuccess, java.util.function.Consumer<Exception> onFailure) {
+        databaseReference.child(songId).child("likes").runTransaction(new Transaction.Handler() {
+            @NonNull
+            @Override
+            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                Long currentValue = mutableData.getValue(Long.class);
+                if (currentValue == null || currentValue <= 0) {
+                    mutableData.setValue(0);
+                } else {
+                    mutableData.setValue(currentValue - 1);
+                }
+                return Transaction.success(mutableData);
+            }
+
+            @Override
+            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
+                if (committed) {
+                    onSuccess.run();
+                } else {
+                    if (error != null) {
+                        onFailure.accept(error.toException());
+                    } else {
+                        onFailure.accept(new Exception("Failed to decrement likes."));
+                    }
                 }
             }
         });

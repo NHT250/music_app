@@ -13,16 +13,16 @@ import com.example.music_application.model.Song;
 
 import java.util.List;
 
-public class RecommendedSongAdapter extends BaseSongAdapter {
+public class RecommendedAdapter extends BaseSongAdapter {
 
     private List<Song> songList;
     private OnSongClickListener listener;
 
     public interface OnSongClickListener {
-        void onSongClick(int position);
+        void onSongClick(Song song);
     }
 
-    public RecommendedSongAdapter(Context context, List<Song> songList, OnSongClickListener listener) {
+    public RecommendedAdapter(Context context, List<Song> songList, OnSongClickListener listener) {
         super(context);
         this.songList = songList;
         this.listener = listener;
@@ -38,11 +38,10 @@ public class RecommendedSongAdapter extends BaseSongAdapter {
     @Override
     public void onBindViewHolder(@NonNull SongViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
+        Song song = songList.get(position);
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
-                if (position != RecyclerView.NO_POSITION) {
-                    listener.onSongClick(position);
-                }
+                listener.onSongClick(song);
             }
         });
     }

@@ -23,7 +23,7 @@ public class TopHitsAdapter extends RecyclerView.Adapter<TopHitsAdapter.TopHitsV
     private OnSongClickListener listener;
 
     public interface OnSongClickListener {
-        void onSongClick(int position);
+        void onSongClick(Song song);
     }
 
     public TopHitsAdapter(Context context, List<Song> songList, OnSongClickListener listener) {
@@ -45,6 +45,12 @@ public class TopHitsAdapter extends RecyclerView.Adapter<TopHitsAdapter.TopHitsV
         holder.txtTitle.setText(song.getTitle());
         holder.txtArtist.setText(song.getArtist());
         Glide.with(context).load(song.getCover()).into(holder.imgCover);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onSongClick(song);
+            }
+        });
     }
 
     @Override
@@ -61,15 +67,6 @@ public class TopHitsAdapter extends RecyclerView.Adapter<TopHitsAdapter.TopHitsV
             imgCover = itemView.findViewById(R.id.img_song_cover);
             txtTitle = itemView.findViewById(R.id.txt_song_title);
             txtArtist = itemView.findViewById(R.id.txt_song_artist);
-
-            itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        listener.onSongClick(position);
-                    }
-                }
-            });
         }
     }
 

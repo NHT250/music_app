@@ -1,131 +1,92 @@
 package com.example.music_application.model;
 
+import android.content.Context;
 import com.google.firebase.database.Exclude;
-
 import java.io.Serializable;
 
-/**
- * Lớp Model TỔNG HỢP cho một bài hát, đảm bảo tương thích với toàn bộ dự án.
- */
 public class Song implements Serializable {
 
-    // --- Các thuộc tính được lưu trên Firebase ---
+    // --- Firebase Attributes (original and new) ---
     private String id;
     private String title;
     private String artist;
-    private String url;      // Dùng cho URL nhạc MP3
-    private String audioUrl; // Tương tự url, để tương thích ngược
-    private String cover;    // Dùng cho URL ảnh bìa
-    private String imageUrl; // Tương tự cover, để tương thích ngược
-    private String category; // Thể loại nhạc
+    private String url;      // Main field for audio URL
+    private String audioUrl; // For backward compatibility
+    private String cover;    // Main field for cover image URL
+    private String imageUrl; // For backward compatibility
+    private String category;
     private int likes;
 
-    // --- Các thuộc tính chỉ dùng trên máy (không lưu lên Firebase) ---
+    // --- Local-only Attributes (Not for Firebase) ---
+    @Exclude
+    private String songResourceName; // For local raw audio files
+    @Exclude
+    private String imageResourceName; // For local drawable images
     @Exclude
     private boolean downloaded;
 
-    // Constructor rỗng - BẮT BUỘC cho Firebase
-    public Song() {
+    // --- Constructors ---
+    public Song() { // Required empty constructor for Firebase
     }
 
-    // --- Getters ---
-    public String getId() {
-        return id;
+    // Constructor for local songs with resource names
+    public Song(int id, String title, String artist, String songResourceName, String imageResourceName) {
+        this.id = String.valueOf(id);
+        this.title = title;
+        this.artist = artist;
+        this.songResourceName = songResourceName;
+        this.imageResourceName = imageResourceName;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getArtist() {
-        return artist;
-    }
-
-    /**
-     * Getter thông minh cho URL nhạc.
-     * Ưu tiên trả về `url`, nếu không có thì trả về `audioUrl`.
-     * Giúp code chạy được với cả dữ liệu cũ và mới.
-     */
+    // --- Intelligent Getters (Restored from original) ---
     public String getUrl() {
-        if (url != null && !url.isEmpty()) {
-            return url;
-        }
-        if (audioUrl != null && !audioUrl.isEmpty()) {
-            return audioUrl;
-        }
-        return ""; // Trả về chuỗi rỗng để tránh NullPointerException
+        if (url != null && !url.isEmpty()) return url;
+        if (audioUrl != null && !audioUrl.isEmpty()) return audioUrl;
+        return "";
     }
 
-    /**
-     * Getter thông minh cho ảnh bìa.
-     * Ưu tiên trả về `cover`, nếu không có thì trả về `imageUrl`.
-     */
     public String getCover() {
-        if (cover != null && !cover.isEmpty()) {
-            return cover;
-        }
-        if (imageUrl != null && !imageUrl.isEmpty()) {
-            return imageUrl;
-        }
-        return ""; // Trả về chuỗi rỗng
+        if (cover != null && !cover.isEmpty()) return cover;
+        if (imageUrl != null && !imageUrl.isEmpty()) return imageUrl;
+        return "";
     }
-    
-    // Các getter dự phòng để tương thích tối đa
+
+    // --- Compatibility Getters (To fix the build errors) ---
     public String getAudioUrl() { return getUrl(); }
     public String getImageUrl() { return getCover(); }
     
-    public String getCategory() { 
-        return category; 
-    }
+    // --- Standard Getters ---
+    public String getId() { return id; }
+    public String getTitle() { return title; }
+    public String getArtist() { return artist; }
+    public String getCategory() { return category; }
+    public int getLikes() { return likes; }
+    @Exclude
+    public boolean isDownloaded() { return downloaded; }
 
-    public int getLikes() {
-        return likes;
+    // --- Standard Setters ---
+    public void setId(String id) { this.id = id; }
+    public void setTitle(String title) { this.title = title; }
+    public void setArtist(String artist) { this.artist = artist; }
+    public void setUrl(String url) { this.url = url; }
+    public void setAudioUrl(String audioUrl) { this.audioUrl = audioUrl; }
+    public void setCover(String cover) { this.cover = cover; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public void setCategory(String category) { this.category = category; }
+    public void setLikes(int likes) { this.likes = likes; }
+    @Exclude
+    public void setDownloaded(boolean downloaded) { this.downloaded = downloaded; }
+
+    // --- Methods for Local Resources ---
+    @Exclude
+    public int getSongResourceId(Context context) {
+        if (songResourceName == null || songResourceName.isEmpty()) return 0;
+        return context.getResources().getIdentifier(songResourceName, "raw", context.getPackageName());
     }
 
     @Exclude
-    public boolean isDownloaded() {
-        return downloaded;
-    }
-
-    // --- Setters ---
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-    
-    public void setAudioUrl(String audioUrl) {
-        this.audioUrl = audioUrl;
-    }
-
-    public void setCover(String cover) {
-        this.cover = cover;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-    
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    @Exclude
-    public void setDownloaded(boolean downloaded) {
-        this.downloaded = downloaded;
+    public int getImageResourceId(Context context) {
+        if (imageResourceName == null || imageResourceName.isEmpty()) return 0;
+        return context.getResources().getIdentifier(imageResourceName, "drawable", context.getPackageName());
     }
 }
