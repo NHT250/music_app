@@ -3,64 +3,79 @@ package com.example.music_application.ui;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.RadioGroup;
-import android.widget.Switch;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.app.AppCompatDelegate;
-
 import com.example.music_application.R;
+import com.example.music_application.util.ThemeManager;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    private static final String PREF_NAME = "museflow_prefs";
-    private static final String KEY_AUTO_NEXT = "pref_auto_next";
-    private static final String KEY_RESUME_LAST = "pref_resume_last";
-    private static final String KEY_THEME = "pref_theme";
+    private static final String PREFS_NAME = "SettingsPrefs";
+    private static final String AUTO_NEXT_KEY = "autoNext";
+    private static final String RESUME_LAST_KEY = "resumeLast";
 
-    private SharedPreferences prefs;
+    private SwitchMaterial switchAutoNext, switchResumeLast;
+    private RadioGroup rgTheme;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        /*
-        prefs = getSharedPreferences(PREF_NAME, MODE_PRIVATE);
+        initViews();
+        loadSettings();
+        setupListeners();
+    }
 
-        Switch switchAutoNext = findViewById(R.id.switchAutoNext);
-        Switch switchResumeLast = findViewById(R.id.switchResumeLast);
-        RadioGroup rgTheme = findViewById(R.id.rgTheme);
+    private void initViews() {
+        switchAutoNext = findViewById(R.id.switch_auto_next);
+        switchResumeLast = findViewById(R.id.switch_resume_last);
+        rgTheme = findViewById(R.id.rg_theme);
+    }
 
-        // Load saved settings
-        switchAutoNext.setChecked(prefs.getBoolean(KEY_AUTO_NEXT, true));
-        switchResumeLast.setChecked(prefs.getBoolean(KEY_RESUME_LAST, false));
+    private void loadSettings() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        switchAutoNext.setChecked(prefs.getBoolean(AUTO_NEXT_KEY, true));
+        switchResumeLast.setChecked(prefs.getBoolean(RESUME_LAST_KEY, false));
 
-        int savedTheme = prefs.getInt(KEY_THEME, AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
-        updateRadioGroup(rgTheme, savedTheme);
+        switch (ThemeManager.getTheme(this)) {
+            case ThemeManager.THEME_LIGHT:
+                rgTheme.check(R.id.rb_light);
+                break;
+            case ThemeManager.THEME_DARK:
+                rgTheme.check(R.id.rb_dark);
+                break;
+            case ThemeManager.THEME_AUTO:
+                rgTheme.check(R.id.rb_auto);
+                break;
+        }
+    }
 
-        // Save settings on change
+    private void setupListeners() {
         switchAutoNext.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean(KEY_AUTO_NEXT, isChecked).apply();
+            saveBoolean(AUTO_NEXT_KEY, isChecked);
         });
 
         switchResumeLast.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            prefs.edit().putBoolean(KEY_RESUME_LAST, isChecked).apply();
+            saveBoolean(RESUME_LAST_KEY, isChecked);
         });
 
         rgTheme.setOnCheckedChangeListener((group, checkedId) -> {
-            int mode = getModeFromCheckedId(checkedId);
-            AppCompatDelegate.setDefaultNightMode(mode);
-            prefs.edit().putInt(KEY_THEME, mode).apply();
+            if (checkedId == R.id.rb_light) {
+                ThemeManager.setTheme(this, ThemeManager.THEME_LIGHT);
+            } else if (checkedId == R.id.rb_dark) {
+                ThemeManager.setTheme(this, ThemeManager.THEME_DARK);
+            } else if (checkedId == R.id.rb_auto) {
+                ThemeManager.setTheme(this, ThemeManager.THEME_AUTO);
+            }
+            recreate();
         });
-        */
     }
 
-    private void updateRadioGroup(RadioGroup rg, int mode) {
-        // This method is currently unused
-    }
-
-    private int getModeFromCheckedId(int checkedId) {
-        // This method is currently unused
-        return 0;
+    private void saveBoolean(String key, boolean value) {
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putBoolean(key, value);
+        editor.apply();
     }
 }

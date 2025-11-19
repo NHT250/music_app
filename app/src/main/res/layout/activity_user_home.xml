@@ -1,188 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground">
+    android:background="?attr/colorSurface"
+    tools:context=".ui.UserHomeActivity">
 
-    <!-- Nội dung chính scroll được -->
     <ScrollView
-        android:id="@+id/scrollContent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/layoutMiniPlayer"
-        android:fillViewport="true">
+        android:layout_above="@+id/bottom_playing_bar">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             android:padding="16dp">
 
             <!-- Header -->
             <RelativeLayout
+                android:id="@+id/header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingBottom="8dp">
+                android:layout_marginBottom="24dp">
 
                 <TextView
-                    android:id="@+id/txtGreeting"
+                    android:id="@+id/logo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="MuseFlow"
+                    android:textColor="#E91E63"
                     android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimary"/>
+                    android:textStyle="bold" />
 
                 <ImageView
-                    android:id="@+id/btnSettings"
+                    android:id="@+id/btn_settings"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:layout_alignParentRight="true"
-                    android:src="@drawable/ic_settings"/>
+                    android:layout_alignParentEnd="true"
+                    android:src="@drawable/ic_settings"
+                    app:tint="?attr/colorOnSurface" />
 
                 <ImageView
-                    android:id="@+id/btnLogout"
+                    android:id="@+id/btn_logout"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/btn_settings"
                     android:src="@drawable/ic_logout"
-                    android:layout_toLeftOf="@id/btnSettings"
-                    android:layout_marginRight="12dp"/>
+                    app:tint="?attr/colorOnSurface" />
 
-                <ImageView
-                    android:id="@+id/btnPlaylists"
+                 <ImageView
+                    android:id="@+id/btn_playlist_list"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/btn_logout"
                     android:src="@drawable/ic_playlist"
-                    android:layout_toLeftOf="@id/btnLogout"
-                    android:layout_marginRight="12dp"/>
+                    app:tint="?attr/colorOnSurface" />
 
                 <ImageView
-                    android:id="@+id/btnProfile"
+                    android:id="@+id/btn_profile"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
-                    android:src="@drawable/ic_user"
-                    android:layout_toLeftOf="@id/btnPlaylists"
-                    android:layout_marginRight="12dp"
-                    android:contentDescription="Profile" />
+                    android:layout_marginEnd="16dp"
+                    android:layout_toStartOf="@id/btn_playlist_list"
+                    android:src="@drawable/ic_profile"
+                    app:tint="?attr/colorOnSurface" />
 
             </RelativeLayout>
 
-            <!-- Thanh tìm kiếm -->
+            <!-- Search Bar -->
             <EditText
-                android:id="@+id/edtSearch"
+                android:id="@+id/search_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Search songs, artists, playlists..."
-                android:padding="12dp"
-                android:background="@drawable/bg_input"
-                android:drawableLeft="@drawable/ic_search"
+                android:background="@drawable/rounded_corner_background"
+                android:backgroundTint="?attr/colorSurfaceVariant"
+                android:drawableStart="@android:drawable/ic_menu_search"
                 android:drawablePadding="8dp"
-                android:layout_marginBottom="16dp"/>
+                android:hint="Search songs, artists, playlists..."
+                android:textColor="?attr/colorOnSurface"
+                android:textColorHint="?android:attr/textColorHint"
+                android:padding="12dp" />
 
-            <!-- Categories Filter -->
-            <HorizontalScrollView
+            <!-- Categories -->
+            <LinearLayout
+                android:id="@+id/categories"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="16dp"
+                android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/layoutCategories"
+                 <Button
+                    android:id="@+id/btn_pop"
+                    style="?android:attr/borderlessButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:text="POP"
+                    android:textColor="?attr/colorOnSurface" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCatPop"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Pop"
-                        android:textColorLink="#A6020202"
-                        app:rippleColor="#E91E63" />
+                <Button
+                    android:id="@+id/btn_indie"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="INDIE"
+                    android:textColor="?attr/colorOnSurface" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCatIndie"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Indie"
-                        app:rippleColor="#E91E63" />
+                <Button
+                    android:id="@+id/btn_hiphop"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HIP-HOP"
+                    android:textColor="?attr/colorOnSurface" />
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCatHipHop"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Hip-Hop"
-                        app:rippleColor="#E91E63" />
+                <Button
+                    android:id="@+id/btn_ballad"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="37dp"
+                    android:text="BALLAD"
+                    android:textColor="?attr/colorOnSurface" />
+            </LinearLayout>
 
-                    <com.google.android.material.button.MaterialButton
-                        android:id="@+id/btnCatBallad"
-                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="8dp"
-                        android:text="Ballad"
-                        app:rippleColor="#E91E63" />
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <!-- Recommended for you (Grid) -->
+            <!-- Top Hits -->
             <TextView
-                android:layout_width="match_parent"
+                android:id="@+id/top_hits_title"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Recommended for you"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvGridSongs"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <!-- Top Hits (List) -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
                 android:text="Top Hits"
-                android:textStyle="bold"
+                android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"/>
+                android:textStyle="bold" />
 
             <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvListSongs"
+                android:id="@+id/rv_top_hits"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <!-- Recommended for you -->
+            <TextView
+                android:id="@+id/recommended_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="Recommended for you"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_recommended"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="vertical"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
         </LinearLayout>
+
     </ScrollView>
 
-    <!-- Empty State -->
-    <TextView
-        android:id="@+id/txtEmpty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Chưa có bài hát nào được admin kích hoạt"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
-    <!-- Mini Player -->
-    <LinearLayout
-        android:id="@+id/layoutMiniPlayer"
+    <!-- Bottom Playing Bar -->
+    <RelativeLayout
+        android:id="@+id/bottom_playing_bar"
         android:layout_width="match_parent"
-        android:layout_height="64dp"
-        android:orientation="horizontal"
-        android:padding="8dp"
-        android:background="@color/colorSurface"
-        android:elevation="8dp"
-        android:layout_alignParentBottom="true">
-        <!-- Mini Player content from previous steps -->
-    </LinearLayout>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/rounded_corner_background"
+        android:backgroundTint="?attr/colorSurfaceVariant"
+        android:padding="12dp"
+        android:layout_margin="16dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/playing_icon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_playing"
+            app:tint="?attr/colorOnSurfaceVariant" />
+
+        <TextView
+            android:id="@+id/playing_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@id/playing_icon"
+            android:layout_marginStart="8dp"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:text="Playing: Son tung" />
+
+    </RelativeLayout>
 
 </RelativeLayout>

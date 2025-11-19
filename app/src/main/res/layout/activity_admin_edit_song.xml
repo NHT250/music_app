@@ -1,90 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
-    android:background="@color/colorBackground">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <EditText
+        android:id="@+id/edit_song_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:hint="Song Title"
+        android:inputType="textCapWords" />
 
-        <TextView
-            android:id="@+id/txtTitleScreen"
+    <EditText
+        android:id="@+id/edit_song_artist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Artist Name"
+        android:inputType="textCapWords" />
+
+    <EditText
+        android:id="@+id/edit_song_audio_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Audio URL"
+        android:inputType="textUri" />
+
+    <EditText
+        android:id="@+id/edit_song_image_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Image URL"
+        android:inputType="textUri" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Category" />
+
+    <RadioGroup
+        android:id="@+id/category_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radio_pop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Add song"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginBottom="16dp"/>
+            android:text="POP" />
 
-        <!-- Cover art -->
-        <ImageView
-            android:id="@+id/imgCover"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_music_note"
-            android:scaleType="centerCrop"
-            android:background="@drawable/bg_avatar_circle"
-            android:padding="4dp"
-            android:contentDescription="Cover art"/>
-
-        <TextView
+        <RadioButton
+            android:id="@+id/radio_indie"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tap to change cover"
-            android:textSize="12sp"
-            android:textColor="@android:color/darker_gray"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp"/>
+            android:text="INDIE" />
 
-        <EditText
-            android:id="@+id/edtTitle"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/radio_hiphop"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Title"
-            android:background="@drawable/bg_input"
-            android:padding="10dp"/>
+            android:text="HIP-HOP" />
 
-        <EditText
-            android:id="@+id/edtArtist"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/radio_ballad"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Artist"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_input"
-            android:padding="10dp"/>
+            android:text="BALLAD" />
+    </RadioGroup>
 
-        <EditText
-            android:id="@+id/edtCategory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Category"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_input"
-            android:padding="10dp"/>
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
 
-        <EditText
-            android:id="@+id/edtFilePath"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Resource Name (e.g. kho_ve_nu_cuoi)"
-            android:layout_marginTop="12dp"
-            android:background="@drawable/bg_input"
-            android:padding="10dp"/>
+    <Button
+        android:id="@+id/btn_save_song"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:backgroundTint="@android:color/holo_red_light"
+        android:text="Save Song" />
 
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save"
-            android:layout_marginTop="20dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@android:color/white"/>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

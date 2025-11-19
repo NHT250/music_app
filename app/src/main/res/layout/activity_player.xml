@@ -1,55 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
     android:padding="24dp">
 
-    <ImageView
-        android:id="@+id/imgBack"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imgBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            app:tint="?attr/colorOnSurface"
+            android:src="@android:drawable/ic_menu_close_clear_cancel"/>
+
+        <ImageView
+            android:id="@+id/btn_add_to_playlist"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            app:tint="?attr/colorOnSurface"
+            android:src="@drawable/ic_playlist" />
+
+    </RelativeLayout>
 
     <ImageView
-        android:id="@+id/imgAlbumArt"
-        android:layout_width="220dp"
+        android:id="@+id/imgCoverArt"
+        android:layout_width="match_parent"
         android:layout_height="220dp"
-        android:layout_marginTop="32dp"
         android:layout_gravity="center_horizontal"
-        android:src="@android:drawable/ic_media_play"/>
+        android:layout_marginTop="32dp" />
 
-    <TextView
-        android:id="@+id/txtTitle"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Song title"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_marginTop="24dp"/>
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/txtTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Song title"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+
+        <ImageView
+            android:id="@+id/btn_like_player"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:tint="?attr/colorOnSurface"
+            android:src="@android:drawable/star_off" />
+        
+        <TextView
+            android:id="@+id/txt_like_count_player"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="?attr/colorOnSurface"
+            android:layout_marginStart="4dp"/>
+
+    </LinearLayout>
 
     <TextView
         android:id="@+id/txtArtist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Artist"
-        android:gravity="center"
+        android:textColor="?attr/colorOnSurface"
         android:layout_marginTop="4dp"/>
 
-    <!-- The SeekBar is still left out to ensure stability -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="24dp">
+
+        <TextView
+            android:id="@+id/txtCurrentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
+            android:text="0:00"/>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="8dp"/>
+
+        <TextView
+            android:id="@+id/txtDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorOnSurface"
+            android:text="0:00"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="48dp">
+        android:layout_marginTop="24dp">
 
         <ImageView
             android:id="@+id/btnPrev"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            app:tint="?attr/colorOnSurface"
             android:src="@android:drawable/ic_media_previous"
             android:padding="4dp"/>
 
@@ -57,6 +125,7 @@
             android:id="@+id/btnPlayPause"
             android:layout_width="56dp"
             android:layout_height="56dp"
+            app:tint="?attr/colorOnSurface"
             android:src="@android:drawable/ic_media_play"
             android:padding="8dp"
             android:layout_marginHorizontal="16dp"/>
@@ -65,6 +134,7 @@
             android:id="@+id/btnNext"
             android:layout_width="36dp"
             android:layout_height="36dp"
+            app:tint="?attr/colorOnSurface"
             android:src="@android:drawable/ic_media_next"
             android:padding="4dp"/>
 

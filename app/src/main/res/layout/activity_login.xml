@@ -13,11 +13,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome back 👋"
+            android:layout_marginTop="32dp"
+            android:text="Log In "
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginTop="32dp"/>
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/edtUsername"
@@ -42,10 +41,10 @@
             android:id="@+id/btnLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sign In"
             android:layout_marginTop="24dp"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@android:color/white"/>
+            android:backgroundTint="@android:color/holo_red_light"
+            android:text="Sign In"
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/txtError"
@@ -59,9 +58,8 @@
             android:id="@+id/txtGoRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Don't have an account? Sign up"
-            android:textColor="@color/colorSecondary"
-            android:layout_marginTop="16dp"/>
+            android:layout_marginTop="16dp"
+            android:text="Don't have an account? Sign up" />
 
     </LinearLayout>
 </ScrollView>

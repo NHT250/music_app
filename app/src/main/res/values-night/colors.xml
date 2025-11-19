@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Material Design default colors -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Dark Theme Colors -->
-    <color name="colorPrimary">#FF80AB</color> <!-- A lighter pink for dark background -->
-    <color name="colorSecondary">#FFB380</color> <!-- A lighter orange -->
-    <color name="colorBackground">#121212</color> <!-- Standard dark background -->
-    <color name="colorSurface">#1E1E1E</color> <!-- Slightly lighter surface for cards -->
+    <!-- App theme colors for Night Mode -->
+    <color name="colorPrimary">#FFBB86FC</color> 
+    <color name="colorPrimaryDark">#FF3700B3</color>
+    <color name="colorAccent">#FF03DAC5</color>
+    <color name="colorBackground">#121212</color> 
+    <color name="colorSurface">#121212</color>
+
+    <!-- SỬA LỖI: Thêm màu colorSecondary -->
+    <color name="colorSecondary">#FF03DAC5</color>
+
 </resources>

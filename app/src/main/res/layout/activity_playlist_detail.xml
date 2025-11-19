@@ -17,14 +17,14 @@
         android:id="@+id/btnAddSongsToPlaylist"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#E91E63"
+        android:backgroundTint="@android:color/holo_red_light"
         android:text="Add Songs" />
 
     <Button
         android:id="@+id/btnShuffle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#E91E63"
+        android:backgroundTint="@android:color/holo_red_light"
         android:text="Shuffle Play" />
 
     <androidx.recyclerview.widget.RecyclerView

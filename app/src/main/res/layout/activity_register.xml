@@ -13,11 +13,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:text="Create account"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary"
-            android:layout_marginBottom="16dp"/>
+            android:textStyle="bold" />
 
         <!-- Display name -->
         <TextView
@@ -52,6 +51,24 @@
             android:padding="12dp"
             android:layout_marginBottom="16dp"
             android:hint="Tên dùng để đăng nhập"/>
+            
+        <!-- Email -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textSize="14sp"
+            android:textColor="@android:color/darker_gray"/>
+
+        <EditText
+            android:id="@+id/edtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_input"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"
+            android:inputType="textEmailAddress"
+            android:hint="Email để xác thực tài khoản"/>
 
         <!-- Password -->
         <TextView
@@ -93,9 +110,9 @@
             android:id="@+id/btnRegister"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/holo_red_light"
             android:text="Sign up"
-            android:backgroundTint="@color/colorPrimary"
-            android:textColor="@android:color/white"/>
+            android:textColor="@android:color/white" />
 
         <TextView
             android:id="@+id/txtGoLogin"
